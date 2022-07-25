@@ -55,7 +55,7 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 			return
 		}
-		err := r.Set(context.Background(), string(cmd.Args[0]), cmd.Args[1])
+		err := r.Set(context.Background(), string(cmd.Args[1]), cmd.Args[2])
 		if err != nil {
 			conn.WriteError(err.Error())
 		} else {
@@ -68,7 +68,7 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 			return
 		}
-		value, err := r.Get(context.Background(), string(cmd.Args[0]))
+		value, err := r.Get(context.Background(), string(cmd.Args[1]))
 		if err != nil {
 			conn.WriteError(err.Error())
 		} else {

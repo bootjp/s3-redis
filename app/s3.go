@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/minio/minio-go/v7/pkg/credentials"
+
 	"github.com/minio/minio-go/v7"
 )
 
@@ -18,6 +20,7 @@ type S3 struct {
 func NewS3(config *Config) *S3 {
 
 	c, err := minio.New(config.S3.Endpoint, &minio.Options{
+		Creds:  credentials.NewStaticV4(config.S3.AccessKey, config.S3.SecretKey, ""),
 		Secure: false,
 		Region: config.S3.Region,
 	})
