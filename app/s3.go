@@ -17,11 +17,10 @@ type S3 struct {
 	bucket string
 }
 
-func NewS3(config *Config) *S3 {
-
+func NewS3(config Config) *S3 {
 	c, err := minio.New(config.S3.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(config.S3.AccessKey, config.S3.SecretKey, ""),
-		Secure: false,
+		Secure: true,
 		Region: config.S3.Region,
 	})
 	if err != nil {

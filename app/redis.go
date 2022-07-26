@@ -16,7 +16,7 @@ type Redis struct {
 	handler       func(conn redcon.Conn, cmd redcon.Command)
 }
 
-func NewRedis(s3 *S3, config *Config) *Redis {
+func NewRedis(s3 *S3, config Config) *Redis {
 	r := &Redis{
 		port:          config.Redis.Port,
 		host:          config.Redis.Bind,
@@ -48,8 +48,19 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 	switch strings.ToLower(string(cmd.Args[0])) {
 	default:
 		conn.WriteError("ERR unknown command '" + string(cmd.Args[0]) + "'")
+		return
+	case "info":
+		conn.WriteBulkString(`
+# Server
+s3-redis version: 0.0.0
+`)
+		return
+	case "command":
+		conn.WriteString("OK")
+		return
 	case "ping":
 		conn.WriteString("PONG")
+		return
 	case "set":
 		if len(cmd.Args) != 3 {
 			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
@@ -58,11 +69,12 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 		err := r.Set(context.Background(), string(cmd.Args[1]), cmd.Args[2])
 		if err != nil {
 			conn.WriteError(err.Error())
+			return
 		} else {
 			conn.WriteString("OK")
+			return
 		}
 
-		conn.WriteString("OK")
 	case "get":
 		if len(cmd.Args) != 2 {
 			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
@@ -71,8 +83,10 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 		value, err := r.Get(context.Background(), string(cmd.Args[1]))
 		if err != nil {
 			conn.WriteError(err.Error())
+			return
 		} else {
 			conn.WriteBulk(value)
+			return
 		}
 
 	case "del":
@@ -83,8 +97,10 @@ func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
 		err := r.Delete(context.Background(), string(cmd.Args[0]))
 		if err != nil {
 			conn.WriteError(err.Error())
+			return
 		} else {
 			conn.WriteString("OK")
+			return
 		}
 	}
 }

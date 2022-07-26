@@ -12,18 +12,17 @@ import (
 
 var (
 	cfgFile string
+	conf    Config
 	rootCmd = &cobra.Command{
 		Use:   "s3-redis",
 		Short: "Redis scales infinitely with S3",
 		//Long: ``,
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			file, err := ioutil.ReadFile(cfgFile)
 			if err != nil {
 				fmt.Println(cfgFile)
 				cobra.CheckErr(err)
 			}
-			var conf *Config
 			err = yaml.Unmarshal(file, &conf)
 			if err != nil {
 				cobra.CheckErr(err)
@@ -62,7 +61,9 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("config file read error")
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
