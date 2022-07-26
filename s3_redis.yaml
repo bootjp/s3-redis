@@ -1,18 +1,18 @@
 version: 1.0
 
-use_cache: yes
-use_dirty_write: no
+use_cache: true
+use_dirty_write: false
 
 redis:
-  port: 6379
+  port: "6379"
   bind: "127.0.0.1"
   password:
 
 s3:
-    version: "s3v4"
-    bucket: "test"
-    region: "us-east-1"
-    access_key: ""
-    secret_key: ""
-    prefix: ""
-    endpoint: "localhost:9000"
+  version: "S3v4"
+  bucket: "test"
+  region: "us-east-1"
+  access_key: ""
+  secret_key: ""
+  prefix: ""
+  endpoint: ""
