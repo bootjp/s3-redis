@@ -2,12 +2,11 @@ package app
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -18,16 +17,6 @@ var (
 		Short: "Redis scales infinitely with S3",
 		//Long: ``,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			file, err := ioutil.ReadFile(cfgFile)
-			if err != nil {
-				fmt.Println(cfgFile)
-				cobra.CheckErr(err)
-			}
-			err = yaml.Unmarshal(file, &conf)
-			if err != nil {
-				cobra.CheckErr(err)
-			}
-
 			s3 := NewS3(conf)
 			redis := NewRedis(s3, conf)
 			s := NewServer(conf, s3, redis)
@@ -59,6 +48,7 @@ func initConfig() {
 		viper.SetConfigType("yaml")
 	}
 
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
@@ -66,4 +56,5 @@ func initConfig() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	cobra.CheckErr(viper.Unmarshal(&conf))
 }
