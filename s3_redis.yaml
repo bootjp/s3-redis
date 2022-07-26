@@ -9,7 +9,7 @@ redis:
   password:
 
 s3:
-  version: "S3v4"
+  version: "s3v4"
   bucket: "test"
   region: "us-east-1"
   access_key: ""
