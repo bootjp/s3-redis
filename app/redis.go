@@ -17,19 +17,13 @@ type Redis struct {
 }
 
 func NewRedis(s3 *S3, config Config) *Redis {
-	r := &Redis{
+	return &Redis{
 		port:          config.Redis.Port,
 		host:          config.Redis.Bind,
 		UseCache:      config.UseCache,
 		UseDirtyWrite: config.UseDirtyWrite,
 		s3:            s3,
 	}
-
-	r.handler = func(conn redcon.Conn, cmd redcon.Command) {
-		r.Handler(conn, cmd)
-	}
-
-	return r
 }
 
 func (r *Redis) Set(ctx context.Context, key string, value []byte) error {
@@ -42,6 +36,32 @@ func (r *Redis) Get(ctx context.Context, key string) ([]byte, error) {
 
 func (r *Redis) Delete(ctx context.Context, key string) error {
 	return r.s3.Delete(ctx, key)
+}
+
+func (r *Redis) Keys(ctx context.Context, key string) ([]string, error) {
+	pattern := strings.HasSuffix(key, "*")
+	key = strings.TrimSuffix(key, "*")
+
+	keys, err := r.s3.List(ctx, key)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []string
+
+	// emulate redis keys
+	for _, s := range keys {
+		if !pattern {
+			if key != s {
+				continue
+			}
+			result = append(result, s)
+			continue
+		}
+		result = append(result, s)
+	}
+
+	return result, nil
 }
 
 func (r *Redis) Handler(conn redcon.Conn, cmd redcon.Command) {
@@ -70,10 +90,9 @@ s3-redis version: 0.0.0
 		if err != nil {
 			conn.WriteError(err.Error())
 			return
-		} else {
-			conn.WriteString("OK")
-			return
 		}
+		conn.WriteString("OK")
+		return
 
 	case "get":
 		if len(cmd.Args) != 2 {
@@ -84,23 +103,54 @@ s3-redis version: 0.0.0
 		if err != nil {
 			conn.WriteError(err.Error())
 			return
-		} else {
-			conn.WriteBulk(value)
-			return
 		}
+		conn.WriteBulk(value)
+		return
 
 	case "del":
 		if len(cmd.Args) != 2 {
 			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 			return
 		}
-		err := r.Delete(context.Background(), string(cmd.Args[0]))
+		err := r.Delete(context.Background(), string(cmd.Args[1]))
 		if err != nil {
 			conn.WriteError(err.Error())
 			return
-		} else {
-			conn.WriteString("OK")
+		}
+		conn.WriteString("OK")
+		return
+	case "keys":
+		if len(cmd.Args) != 2 {
+			conn.WriteError("ERR wrong number of arguments for '" + string(cmd.Args[0]) + "' command")
 			return
 		}
+		keys, err := r.Keys(context.Background(), string(cmd.Args[1]))
+		if err != nil {
+			conn.WriteError(err.Error())
+			return
+		}
+
+		conn.WriteArray(len(keys))
+		for _, key := range keys {
+			conn.WriteBulkString(key)
+		}
+		return
+	case "exists":
+		keys, err := r.Get(context.Background(), string(cmd.Args[1]))
+		if err != nil {
+			conn.WriteInt(0)
+			return
+		}
+
+		var res int
+
+		if len(keys) > 0 {
+			res = 1
+		} else {
+			res = 0
+		}
+		conn.WriteInt(res)
+		return
 	}
+
 }
