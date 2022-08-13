@@ -3,10 +3,9 @@ package app
 import (
 	"bytes"
 	"context"
+	"github.com/minio/minio-go/v7/pkg/credentials"
 	"io/ioutil"
 	"log"
-
-	"github.com/minio/minio-go/v7/pkg/credentials"
 
 	"github.com/minio/minio-go/v7"
 )
@@ -53,7 +52,7 @@ func (s *S3) Delete(ctx context.Context, key string) error {
 
 func (s *S3) List(ctx context.Context, key string) ([]string, error) {
 	objectCh := s.Client.ListObjects(ctx, s.bucket, minio.ListObjectsOptions{
-		Prefix:    s.prefix,
+		Prefix:    key,
 		Recursive: true,
 	})
 
@@ -62,8 +61,8 @@ func (s *S3) List(ctx context.Context, key string) ([]string, error) {
 		if object.Err != nil {
 			return nil, object.Err
 		}
-		result = append(result, object.Key)
 
+		result = append(result, object.Key)
 	}
 
 	return result, nil

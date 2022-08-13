@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis?ref=badge_shield)
+
 # s3-redis
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis?ref=badge_shield)
 
@@ -6,3 +8,4 @@
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbootjp%2Fs3-redis?ref=badge_large)
+

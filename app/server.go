@@ -20,7 +20,7 @@ func NewServer(config Config, s3 *S3, redis *Redis) *Server {
 
 func (s *Server) Run() error {
 	laddr := s.Config.Redis.Bind + ":" + s.Config.Redis.Port
-	err := redcon.ListenAndServe(laddr, s.Redis.handler, func(conn redcon.Conn) bool {
+	err := redcon.ListenAndServe(laddr, s.Redis.Handler, func(conn redcon.Conn) bool {
 		// Use this function to accept or deny the connection.
 		// log.Printf("accept: %s", conn.RemoteAddr())
 		return true
