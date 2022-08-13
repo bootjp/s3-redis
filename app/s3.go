@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"io/ioutil"
+	"io"
 	"log"
 
 	"github.com/minio/minio-go/v7"
@@ -43,7 +43,7 @@ func (s *S3) Get(ctx context.Context, key string) ([]byte, error) {
 		return nil, err
 	}
 
-	return ioutil.ReadAll(o)
+	return io.ReadAll(o)
 }
 
 func (s *S3) Delete(ctx context.Context, key string) error {
