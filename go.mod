@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/minio/minio-go/v7 v7.0.40
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.0
 	github.com/spf13/viper v1.13.0
 	github.com/tidwall/redcon v1.6.0
 	gopkg.in/yaml.v2 v2.4.0
@@ -15,7 +15,7 @@ require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/klauspost/cpuid v1.3.1 // indirect
