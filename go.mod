@@ -3,7 +3,7 @@ module github.com/bootjp/s3-redis
 go 1.19
 
 require (
-	github.com/minio/minio-go/v7 v7.0.56
+	github.com/minio/minio-go/v7 v7.0.57
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	github.com/tidwall/redcon v1.6.2
