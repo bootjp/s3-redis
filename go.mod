@@ -1,6 +1,6 @@
 module github.com/bootjp/s3-redis
 
-go 1.19
+go 1.23
 
 require (
 	github.com/minio/minio-go/v7 v7.0.63
