@@ -6,7 +6,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.63
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.16.0
-	github.com/tidwall/redcon v1.6.2
+	github.com/tidwall/redcon v1.6.4
 	gopkg.in/yaml.v3 v3.0.1
 )
 
