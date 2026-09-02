@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/minio/minio-go/v7 v7.0.63
-	github.com/spf13/cobra v1.8.1
+	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.16.0
 	github.com/tidwall/redcon v1.6.2
 	gopkg.in/yaml.v3 v3.0.1
@@ -33,7 +33,7 @@ require (
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/tidwall/btree v1.3.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
